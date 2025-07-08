@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-fullscreen">
+    <title>Mobile Arcade - Pong & More</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div id="gameContainer">
+        <!-- Main Menu -->
+        <div id="mainMenu" class="screen active">
+            <div class="menu-header">
+                <h1>Mobile Arcade</h1>
+                <p>Place phone flat • Each player takes a side</p>
+            </div>
+            <div class="game-selection">
+                <button class="game-button" data-game="pong">
+                    <h3>PONG</h3>
+                    <p>Classic paddle battle</p>
+                </button>
+                <button class="game-button" data-game="airhockey">
+                    <h3>AIR HOCKEY</h3>
+                    <p>360° paddle movement</p>
+                </button>
+                <button class="game-button" data-game="breakout">
+                    <h3>BREAKOUT DUEL</h3>
+                    <p>Destroy opponent's bricks</p>
+                </button>
+                <button class="game-button" data-game="tanks">
+                    <h3>TANK BATTLE</h3>
+                    <p>Top-down combat</p>
+                </button>
+            </div>
+            <div class="menu-footer">
+                <button id="settingsBtn" class="secondary-btn">Settings</button>
+                <button id="howToPlayBtn" class="secondary-btn">How to Play</button>
+            </div>
+        </div>
+
+        <!-- Game Canvas -->
+        <div id="gameScreen" class="screen">
+            <canvas id="gameCanvas"></canvas>
+            <div id="gameUI">
+                <div id="player1Score" class="score player1">0</div>
+                <div id="player2Score" class="score player2">0</div>
+                <button id="pauseBtn" class="pause-btn">⏸</button>
+                <button id="backToMenuBtn" class="back-btn">🏠</button>
+            </div>
+        </div>
+
+        <!-- Pause Menu -->
+        <div id="pauseMenu" class="screen overlay">
+            <div class="pause-content">
+                <h2>Game Paused</h2>
+                <button id="resumeBtn" class="menu-btn">Resume</button>
+                <button id="restartBtn" class="menu-btn">Restart</button>
+                <button id="mainMenuBtn" class="menu-btn">Main Menu</button>
+            </div>
+        </div>
+
+        <!-- Settings Menu -->
+        <div id="settingsMenu" class="screen overlay">
+            <div class="settings-content">
+                <h2>Settings</h2>
+                <div class="setting-item">
+                    <label>Game Speed:</label>
+                    <input type="range" id="gameSpeed" min="0.5" max="2" step="0.1" value="1">
+                    <span id="speedValue">1.0x</span>
+                </div>
+                <div class="setting-item">
+                    <label>Paddle Size:</label>
+                    <input type="range" id="paddleSize" min="0.7" max="1.5" step="0.1" value="1">
+                    <span id="paddleSizeValue">1.0x</span>
+                </div>
+                <div class="setting-item">
+                    <label>Sound Effects:</label>
+                    <input type="checkbox" id="soundFX" checked>
+                </div>
+                <div class="setting-item">
+                    <label>Vibration:</label>
+                    <input type="checkbox" id="vibration" checked>
+                </div>
+                <button id="closeSettingsBtn" class="menu-btn">Close</button>
+            </div>
+        </div>
+
+        <!-- How to Play -->
+        <div id="howToPlayMenu" class="screen overlay">
+            <div class="howto-content">
+                <h2>How to Play</h2>
+                <div class="instructions">
+                    <div class="instruction-step">
+                        <h3>1. Position Your Phone</h3>
+                        <p>Place your phone flat on a table in landscape mode</p>
+                    </div>
+                    <div class="instruction-step">
+                        <h3>2. Choose Your Side</h3>
+                        <p>Each player sits on opposite sides of the phone</p>
+                    </div>
+                    <div class="instruction-step">
+                        <h3>3. Control Your Paddle</h3>
+                        <p>Touch and drag in your area to move your paddle</p>
+                    </div>
+                    <div class="instruction-step">
+                        <h3>4. Score Points</h3>
+                        <p>Get the ball past your opponent's paddle to score!</p>
+                    </div>
+                </div>
+                <button id="closeHowToBtn" class="menu-btn">Got It!</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Audio Elements -->
+    <audio id="paddleHit" preload="auto">
+        <source src="audio/paddle.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="wallHit" preload="auto">
+        <source src="audio/wall.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="scoreSound" preload="auto">
+        <source src="audio/score.mp3" type="audio/mpeg">
+    </audio>
+
+    <script src="js/utils.js"></script>
+    <script src="js/gameEngine.js"></script>
+    <script src="js/games/pong.js"></script>
+    <script src="js/games/airHockey.js"></script>
+    <script src="js/games/breakout.js"></script>
+    <script src="js/games/tanks.js"></script>
+    <script src="js/inputManager.js"></script>
+    <script src="js/audioManager.js"></script>
+    <script src="js/gameManager.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
