@@ -31,24 +31,28 @@ class PongGame {
     }
 
     init() {
+        console.log('Initializing Pong game...');
         const canvasSize = this.engine.getCanvasSize();
+        console.log('Canvas size:', canvasSize);
         const centerX = canvasSize.x / 2;
         const centerY = canvasSize.y / 2;
         
         // Create paddles
+        const paddleSize = GameManager?.settings?.paddleSize || 1.0;
+        console.log('Paddle size multiplier:', paddleSize);
         this.paddle1 = new Paddle(
             50, 
             centerY, 
-            this.settings.paddleWidth * GameManager.settings.paddleSize, 
-            this.settings.paddleHeight * GameManager.settings.paddleSize,
+            this.settings.paddleWidth * paddleSize, 
+            this.settings.paddleHeight * paddleSize,
             true
         );
         
         this.paddle2 = new Paddle(
             canvasSize.x - 50, 
             centerY, 
-            this.settings.paddleWidth * GameManager.settings.paddleSize, 
-            this.settings.paddleHeight * GameManager.settings.paddleSize,
+            this.settings.paddleWidth * paddleSize, 
+            this.settings.paddleHeight * paddleSize,
             false
         );
         
@@ -58,7 +62,8 @@ class PongGame {
         
         // Create ball
         this.ball = new Ball(centerX, centerY, this.settings.ballRadius);
-        this.ball.speed = this.settings.ballSpeed * GameManager.settings.gameSpeed;
+        const gameSpeed = GameManager?.settings?.gameSpeed || 1.0;
+        this.ball.speed = this.settings.ballSpeed * gameSpeed;
         
         // Add to engine
         this.engine.addGameObject(this.paddle1);
@@ -265,12 +270,15 @@ class PongGame {
 
     // Handle settings changes
     updateSettings() {
+        const paddleSize = GameManager?.settings?.paddleSize || 1.0;
+        const gameSpeed = GameManager?.settings?.gameSpeed || 1.0;
+        
         if (this.paddle1 && this.paddle2) {
             // Update paddle sizes
-            this.paddle1.width = this.settings.paddleWidth * GameManager.settings.paddleSize;
-            this.paddle1.height = this.settings.paddleHeight * GameManager.settings.paddleSize;
-            this.paddle2.width = this.settings.paddleWidth * GameManager.settings.paddleSize;
-            this.paddle2.height = this.settings.paddleHeight * GameManager.settings.paddleSize;
+            this.paddle1.width = this.settings.paddleWidth * paddleSize;
+            this.paddle1.height = this.settings.paddleHeight * paddleSize;
+            this.paddle2.width = this.settings.paddleWidth * paddleSize;
+            this.paddle2.height = this.settings.paddleHeight * paddleSize;
         }
         
         if (this.ball) {
@@ -278,7 +286,7 @@ class PongGame {
             const currentSpeed = this.ball.velocity.magnitude();
             if (currentSpeed > 0) {
                 this.ball.velocity = this.ball.velocity.normalize().multiply(
-                    this.settings.ballSpeed * GameManager.settings.gameSpeed
+                    this.settings.ballSpeed * gameSpeed
                 );
             }
         }

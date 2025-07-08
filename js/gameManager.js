@@ -238,6 +238,9 @@ class GameManager {
     }
 
     startGame(gameType) {
+        console.log('Starting game:', gameType);
+        console.log('GameManager settings:', this.settings);
+        
         this.currentGameType = gameType;
         this.gameState = 'playing';
         
@@ -248,29 +251,36 @@ class GameManager {
         this.engine.clear();
         
         // Create new game based on type
-        switch (gameType) {
-            case 'pong':
-                this.currentGame = new PongGame(this.engine);
-                break;
-            case 'airhockey':
-                this.currentGame = new AirHockeyGame(this.engine);
-                break;
-            case 'breakout':
-                this.currentGame = new BreakoutGame(this.engine);
-                break;
-            case 'tanks':
-                this.currentGame = new TankGame(this.engine);
-                break;
-            default:
-                console.error('Unknown game type:', gameType);
-                return;
+        try {
+            switch (gameType) {
+                case 'pong':
+                    this.currentGame = new PongGame(this.engine);
+                    break;
+                case 'airhockey':
+                    this.currentGame = new AirHockeyGame(this.engine);
+                    break;
+                case 'breakout':
+                    this.currentGame = new BreakoutGame(this.engine);
+                    break;
+                case 'tanks':
+                    this.currentGame = new TankGame(this.engine);
+                    break;
+                default:
+                    console.error('Unknown game type:', gameType);
+                    return;
+            }
+            
+            this.showScreen('gameScreen');
+            this.updateScore(0, 0);
+            
+            // Apply current settings
+            this.updateGameSettings();
+            
+            console.log('Game started successfully:', this.currentGame);
+        } catch (error) {
+            console.error('Error starting game:', error);
+            this.showScreen('mainMenu');
         }
-        
-        this.showScreen('gameScreen');
-        this.updateScore(0, 0);
-        
-        // Apply current settings
-        this.updateGameSettings();
     }
 
     pauseGame() {
@@ -360,21 +370,46 @@ class GameManager {
     }
 
     loadSettings() {
-        const saved = Utils.loadFromStorage('gameSettings', this.settings);
-        this.settings = { ...this.settings, ...saved };
-        
-        // Apply loaded settings to UI
-        document.getElementById('gameSpeed').value = this.settings.gameSpeed;
-        document.getElementById('speedValue').textContent = this.settings.gameSpeed.toFixed(1) + 'x';
-        
-        document.getElementById('paddleSize').value = this.settings.paddleSize;
-        document.getElementById('paddleSizeValue').textContent = this.settings.paddleSize.toFixed(1) + 'x';
-        
-        document.getElementById('soundFX').checked = this.settings.soundFX;
-        document.getElementById('vibration').checked = this.settings.vibration;
-        
-        // Apply to managers
-        AudioManager.setEnabled(this.settings.soundFX);
+        try {
+            const saved = Utils.loadFromStorage('gameSettings', this.settings);
+            this.settings = { ...this.settings, ...saved };
+            
+            console.log('Loaded settings:', this.settings);
+            
+            // Apply loaded settings to UI
+            const gameSpeedEl = document.getElementById('gameSpeed');
+            const speedValueEl = document.getElementById('speedValue');
+            const paddleSizeEl = document.getElementById('paddleSize');
+            const paddleSizeValueEl = document.getElementById('paddleSizeValue');
+            const soundFXEl = document.getElementById('soundFX');
+            const vibrationEl = document.getElementById('vibration');
+            
+            if (gameSpeedEl) {
+                gameSpeedEl.value = this.settings.gameSpeed;
+            }
+            if (speedValueEl) {
+                speedValueEl.textContent = this.settings.gameSpeed.toFixed(1) + 'x';
+            }
+            
+            if (paddleSizeEl) {
+                paddleSizeEl.value = this.settings.paddleSize;
+            }
+            if (paddleSizeValueEl) {
+                paddleSizeValueEl.textContent = this.settings.paddleSize.toFixed(1) + 'x';
+            }
+            
+            if (soundFXEl) {
+                soundFXEl.checked = this.settings.soundFX;
+            }
+            if (vibrationEl) {
+                vibrationEl.checked = this.settings.vibration;
+            }
+            
+            // Apply to managers
+            AudioManager.setEnabled(this.settings.soundFX);
+        } catch (error) {
+            console.error('Error loading settings:', error);
+        }
     }
 
     saveSettings() {
